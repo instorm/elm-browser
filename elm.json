@@ -10,9 +10,7 @@
         "Browser.Events",
         "Browser.Navigation",
         "Browser.WebSQL",
-        "Browser.ProOperate.Card",
         "Browser.ProOperate.Error",
-        "Browser.ProOperate.Config"
     ],
     "elm-version": "0.19.0 <= v < 0.20.0",
     "dependencies": {
