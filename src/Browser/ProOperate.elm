@@ -43,9 +43,14 @@ module Browser.ProOperate exposing
 @docs productType, terminalId, firmwareVersion, contentsSetVersion
 
 
-# Tasks
+# Touch
 
 @docs untilTouch_pro2
+
+
+# Sound
+
+@docs playSound
 
 -}
 
@@ -198,3 +203,35 @@ untilTouch_pro2 config =
                 |> Maybe.withDefault (Error.new "Unknown Error" "Where?")
     in
     Elm.Kernel.ProOperate.startCommunication_pro2 config toError
+
+
+
+-- Sound Task
+
+
+{-| -}
+playSound : String -> Task Error Int
+playSound filePath =
+    Elm.Kernel.ProOperate.playSound filePath
+        |> Task.mapError soundErrorFromInt
+
+
+
+-- Inner
+
+
+{-| -}
+soundErrorFromInt : Int -> Error
+soundErrorFromInt n =
+    let
+        errors =
+            [ ( -1, Error.new "Arg Error." "param.*" )
+            , ( -2, Error.new "Sound file not exist." "param.filePath" )
+            , ( -3, Error.new "Invalid file format." "param.filePath" )
+            , ( -4, Error.new "Too many play sound." "Sound System" )
+            , ( -5, Error.new "System Busy" "Sound System" )
+            ]
+    in
+    Dict.fromList errors
+        |> Dict.get n
+        |> Maybe.withDefault (Error.new "Unknown Error" "Sound System")
