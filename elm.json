@@ -10,10 +10,7 @@
         "Browser.Events",
         "Browser.Navigation",
         "Browser.WebSQL",
-        "Browser.ProOperate",
         "Browser.ProOperate.Card",
-        "Browser.ProOperate.Keypad",
-        "Browser.ProOperate.Sound",
         "Browser.ProOperate.Error",
         "Browser.ProOperate.Config"
     ],
