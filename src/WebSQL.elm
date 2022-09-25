@@ -1,4 +1,4 @@
-module Browser.WebSQL exposing
+module WebSQL exposing
     ( Database, Transaction, Param(..), Error(..)
     , openDatabase
     , transaction, executeSql, executeQuery
