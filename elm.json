@@ -9,6 +9,10 @@
         "Browser.Dom",
         "Browser.Events",
         "Browser.Navigation",
+        "ProOperate.Card",
+        "ProOperate.Error",
+        "ProOperate.Keypad",
+        "ProOperate.Sound",
         "ProOperate",
         "WebSQL"
     ],
