@@ -1,6 +1,7 @@
 /*
 
 import Elm.Kernel.Debug exposing (crash)
+import Maybe exposing (Just, Nothing)
 
 */
 
@@ -152,10 +153,10 @@ var _ProOperate_startCommunication_pro2 = F2(function (elmConfig, toError)
         /* 値をMaybeに */
         function _valueToMaybe(value) {
             if (value === undefined) {
-                return elm$core$Maybe$Nothing;
+                return __Maybe_Nothing;
             }
             else {
-                return elm$core$Maybe$Just(value);
+                return __Maybe_Just(value);
             }
         }
         /* Config設定 */
