@@ -4,7 +4,7 @@ module ProOperate exposing
     , firmwareVersion
     , contentsSetVersion
     , Config_pro2, defaultConfig_pro2
-    , ResponseObject, untilTouch_pro2
+    , TouchResponse, untilTouch_pro2
     )
 
 {-| This module helps you operate the Pit Touch Pro. This is the
@@ -30,7 +30,7 @@ PitTouch is Reader for Felica.
 # Touch
 
 @docs Config_pro2, defaultConfig_pro2
-@docs ResponseObject, untilTouch_pro2
+@docs TouchResponse, untilTouch_pro2
 
 -}
 
@@ -95,7 +95,7 @@ defaultConfig_pro2 =
 
 
 {-| -}
-type alias ResponseObject =
+type alias TouchResponse =
     { category : Int
     , paramResult : Maybe Int
     , auth : Maybe String
@@ -105,7 +105,7 @@ type alias ResponseObject =
 
 
 {-| -}
-untilTouch_pro2 : Config_pro2 -> Task Error ResponseObject
+untilTouch_pro2 : Config_pro2 -> Task Error TouchResponse
 untilTouch_pro2 config =
     let
         errors =
