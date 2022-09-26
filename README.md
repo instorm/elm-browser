@@ -1,6 +1,6 @@
 # Elm in the Browser! with Extension for PitTouch.
 
-This package allows you to create Elm programs that run in browsers.
+This package allows you to create Elm programs that run in browsers.  
 And provides interface for PitTouch device feature.
 
 ## Learning Path
