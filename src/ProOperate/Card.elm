@@ -1,9 +1,9 @@
 module ProOperate.Card exposing
     ( Felica, FelicaService
     , Mifare, MifareService
-    , felicaCard
-    , sapicaCard
-    , suicaCard
+    , felica
+    , sapica
+    , suica
     )
 
 {-| This Module is an Interface for Cards supported by PitTouch.
@@ -17,9 +17,9 @@ module ProOperate.Card exposing
 
 # Instance of Card
 
-@docs felicaCard
-@docs sapicaCard
-@docs suicaCard
+@docs felica
+@docs sapica
+@docs suica
 
 -}
 
@@ -56,18 +56,18 @@ type alias MifareService =
 
 
 {-| -}
-felicaCard : Felica
-felicaCard =
+felica : Felica
+felica =
     Felica "FFFF" True []
 
 
 {-| -}
-suicaCard : Felica
-suicaCard =
+suica : Felica
+suica =
     Felica "0003" True [ FelicaService "090F" 0 20 ]
 
 
 {-| -}
-sapicaCard : Felica
-sapicaCard =
+sapica : Felica
+sapica =
     Felica "865E" True [ FelicaService "090F" 0 20 ]

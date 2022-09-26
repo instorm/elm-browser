@@ -5,12 +5,12 @@ effect module ProOperate.Keypad where { subscription = MySub } exposing
     , Display
     , getDisplayString, setDisplayString
     , observeUsb, observeKeyUp, observeKeyDown
-    , andThenKeypad
-    , mapDisplayKeypad
-    , mapFirstLineKeypad
-    , mapSecondLineKeypad
-    , mapBothLineKeypad
-    , KeypadEvent
+    , andThen
+    , mapDisplay
+    , mapFirstLine
+    , mapSecondLine
+    , mapBothLine
+    , Event
     )
 
 {-| This Module is an inteface for Keypad device supported by PitTouch.
@@ -45,16 +45,16 @@ Provides a device operation interface for keypad device supported by PitTouch.
 
 # Funcy Function for Keypad Display
 
-@docs andThenKeypad
-@docs mapDisplayKeypad
-@docs mapFirstLineKeypad
-@docs mapSecondLineKeypad
-@docs mapBothLineKeypad
+@docs andThen
+@docs mapDisplay
+@docs mapFirstLine
+@docs mapSecondLine
+@docs mapBothLine
 
 
 # Effect Manager
 
-@docs KeypadEvent
+@docs Event
 
 -}
 
@@ -118,7 +118,7 @@ usbStatusFromInt n =
 
 
 {-| -}
-type KeypadEvent msg
+type Event msg
     = Usb (UsbStatus -> msg)
     | KeyUp (Int -> msg)
     | KeyDown (Int -> msg)
@@ -147,19 +147,19 @@ setDisplayString display =
 
 
 {-| -}
-andThenKeypad : (Display -> Task Error b) -> Task Error Device -> Task Error b
-andThenKeypad f keypadDevice =
+andThen : (Display -> Task Error b) -> Task Error Device -> Task Error b
+andThen f keypadDevice =
     keypadDevice
         |> Task.andThen (always getDisplayString)
         |> Task.andThen f
 
 
 {-| -}
-mapDisplayKeypad :
+mapDisplay :
     (Display -> Display)
     -> Task Error Device
     -> Task Error Device
-mapDisplayKeypad f keypadDevice =
+mapDisplay f keypadDevice =
     keypadDevice
         |> Task.andThen (always getDisplayString)
         |> Task.map f
@@ -168,12 +168,12 @@ mapDisplayKeypad f keypadDevice =
 
 
 {-| -}
-mapBothLineKeypad :
+mapBothLine :
     (String -> String)
     -> (String -> String)
     -> Task Error Device
     -> Task Error Device
-mapBothLineKeypad f1 f2 keypadDevice =
+mapBothLine f1 f2 keypadDevice =
     let
         applyFunction r =
             { r
@@ -181,25 +181,25 @@ mapBothLineKeypad f1 f2 keypadDevice =
                 , secondLine = f2 r.secondLine
             }
     in
-    mapDisplayKeypad applyFunction keypadDevice
+    mapDisplay applyFunction keypadDevice
 
 
 {-| -}
-mapFirstLineKeypad :
+mapFirstLine :
     (String -> String)
     -> Task Error Device
     -> Task Error Device
-mapFirstLineKeypad f keypadDevice =
-    mapBothLineKeypad f identity keypadDevice
+mapFirstLine f keypadDevice =
+    mapBothLine f identity keypadDevice
 
 
 {-| -}
-mapSecondLineKeypad :
+mapSecondLine :
     (String -> String)
     -> Task Error Device
     -> Task Error Device
-mapSecondLineKeypad f keypadDevice =
-    mapBothLineKeypad identity f keypadDevice
+mapSecondLine f keypadDevice =
+    mapBothLine identity f keypadDevice
 
 
 
@@ -230,7 +230,7 @@ observeKeyDown tagger =
 
 {-| -}
 type alias Taggers msg =
-    List (KeypadEvent msg)
+    List (Event msg)
 
 
 {-| -}
@@ -247,7 +247,7 @@ type alias State msg =
 
 {-| -}
 type MySub msg
-    = MySub String (KeypadEvent msg)
+    = MySub String (Event msg)
 
 
 {-| -}

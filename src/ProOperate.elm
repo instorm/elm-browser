@@ -88,7 +88,7 @@ defaultConfig_pro2 =
     , successLamp = "BB0N"
     , failLamp = "RR0N"
     , waitLamp = "BG1L"
-    , felicas = [ Card.felicaCard ]
+    , felicas = [ Card.felica ]
     , mifares = []
     , typeB = False
     }
