@@ -74,8 +74,8 @@ type alias Config_pro2 =
     , successLamp : String
     , failLamp : String
     , waitLamp : String
-    , felicas : List Felica
-    , mifares : List Mifare
+    , felicaList : List Felica
+    , mifareList : List Mifare
     , typeB : Bool
     }
 
@@ -88,8 +88,8 @@ defaultConfig_pro2 =
     , successLamp = "BB0N"
     , failLamp = "RR0N"
     , waitLamp = "BG1L"
-    , felicas = [ Card.felica ]
-    , mifares = []
+    , felicaList = [ Card.suica, Card.felica ]
+    , mifareList = []
     , typeB = False
     }
 

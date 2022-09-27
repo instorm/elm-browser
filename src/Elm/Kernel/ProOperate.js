@@ -116,7 +116,7 @@ function _ProOperate_getKeypadConnected()
 function _ProOperate_toFelicaArray(elmConfig)
 {
     var result = [];
-    var xs = _List_toArray(elmConfig.felicas);
+    var xs = _List_toArray(elmConfig.felicaList);
     for (var i = xs.length; i--; ) {
         var a = xs[i];
         a.services = _List_toArray(a.services);
@@ -132,7 +132,7 @@ function _ProOperate_toFelicaArray(elmConfig)
 function _ProOperate_toMifareArray(elmConfig)
 {
     var result = [];
-    var xs = _List_toArray(elmConfig.mifares);
+    var xs = _List_toArray(elmConfig.mifareList);
     for (var i = xs.length; i--; ) {
         var a = xs[i];
         a.services = _List_toArray(a.services);
@@ -146,8 +146,8 @@ function _ProOperate_toMifareArray(elmConfig)
 
 var _ProOperate_startCommunication_pro2 = F2(function (elmConfig, toError)
 {
-    var felicas = _ProOperate_toFelicaArray(elmConfig);
-    var mifares = _ProOperate_toMifareArray(elmConfig);
+    var felicaArray = _ProOperate_toFelicaArray(elmConfig);
+    var mifareArray = _ProOperate_toMifareArray(elmConfig);
     return _Scheduler_binding(function(callback)
     {
         /* 値をMaybeに */
@@ -166,8 +166,8 @@ var _ProOperate_startCommunication_pro2 = F2(function (elmConfig, toError)
             successLamp: elmConfig.successLamp,
             failLamp: elmConfig.failLamp,
             waitLamp: elmConfig.waitLamp,
-            felica: felicas,
-            mifare: mifares,
+            felica: felicaArray,
+            mifare: mifareArray,
             onetime: true,
             typeB: elmConfig.typeB,
             onEvent: undefined
