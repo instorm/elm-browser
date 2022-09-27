@@ -170,15 +170,16 @@ init =
 
 {-| -}
 subMap : (a -> b) -> MySub a -> MySub b
-subMap f (MySub _ tagger) =
+subMap f (MySub config tagger) =
     case tagger of
         Touch g ->
-            MySub "touch" (Touch (f << g))
+            MySub config (Touch (f << g))
 
 
 {-| -}
 type alias Msg =
-    TouchResponse
+    { response : TouchResponse
+    }
 
 
 {-| -}
@@ -191,26 +192,27 @@ onEffects router newSubs { tags, pid } =
     let
         config =
             List.head newSubs
-                |> Maybe.map (\(MySub config _) -> config)
+                |> Maybe.map (\(MySub a _) -> a)
+                |> Maybe.withDefault defaultConfig_pro2
 
-        tags =
-            List.map (\(MySub _ tagger) -> tagger) newSubs
+        newtags =
+            List.map (\(MySub _ a) -> a) newSubs
     in
     case pid of
         Nothing ->
-            case tags of
+            case newtags of
                 [] ->
                     Task.succeed (State tags pid)
 
                 _ ->
                     watch config (Platform.sendToSelf router) Msg
                         |> Process.spawn
-                        |> Task.map (\pid -> State tags (Just pid))
+                        |> Task.map (\pid_ -> State newtags (Just pid_))
 
-        Just pid ->
+        Just pid_ ->
             case newSubs of
                 [] ->
-                    Process.kill pid
+                    Process.kill pid_
                         |> Task.map (always (State [] Nothing))
 
                 _ ->
@@ -246,5 +248,5 @@ onSelfMsg router msg state =
             Task.succeed state
 
         tagger :: rest ->
-            Task.sequence (List.map send tagger :: rest)
+            Task.sequence (List.map send (tagger :: rest))
                 |> Task.map (always state)
