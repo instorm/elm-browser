@@ -77,9 +77,9 @@ function _ProOperate_setKeypadDisplay(display)
     });
 }
 
-var _ProOperate_spawnCommunication_pro2 = F3(function (config, toSuccessTask, toMsg)
+var _ProOperate_spawnCommunication_pro2 = F3(function (elmConfig, toSuccessTask, toMsg)
 {
-    console.log("config:"+JSON.stringify(config));
+    console.log("--config:"+JSON.stringify(elmConfig));
     return _Scheduler_binding(function(callback)
     {
         /* 値をMaybeに */
@@ -91,7 +91,7 @@ var _ProOperate_spawnCommunication_pro2 = F3(function (config, toSuccessTask, to
                 return __Maybe_Just(value);
             }
         }
-        var config = _ProOperate_elmConfigToJsConfig(config);
+        var config = _ProOperate_elmConfigToJsConfig(elmConfig);
         config.onetime = False
         config.onEvent = onEvent;
         var touchPromise = new Promise((resolve, reject) => {
