@@ -119,3 +119,130 @@ untilTouch_pro2 config =
                 |> Maybe.withDefault (newError "Unknown Error" "Where?")
     in
     Elm.Kernel.ProOperate.startCommunication_pro2 config toError
+
+
+
+-- Sub msg
+
+
+{-| -}
+observeTouch : Config_pro2 -> (TouchResponse -> msg) -> Sub msg
+observeTouch config tagger =
+    subscription (MySub config (Touch tagger))
+
+
+
+-- For Effect Manager
+
+
+{-| -}
+type Event msg
+    = Touch (TouchResponse -> msg)
+
+
+{-| -}
+type alias Taggers msg =
+    List (Event msg)
+
+
+{-| -}
+type alias State msg =
+    { tags : Taggers msg
+    , pid : Maybe Process.Id
+    }
+
+
+{-| -}
+type MySub msg
+    = MySub Config_pro2 (Event msg)
+
+
+{-| -}
+init : Task Never (State msg)
+init =
+    Task.succeed
+        { tags = []
+        , pid = Nothing
+        }
+
+
+{-| -}
+subMap : (a -> b) -> MySub a -> MySub b
+subMap f (MySub _ tagger) =
+    case tagger of
+        Touch g ->
+            MySub "touch" (Touch (f << g))
+
+
+{-| -}
+type alias Msg =
+    TouchResponse
+
+
+{-| -}
+onEffects :
+    Platform.Router msg Msg
+    -> List (MySub msg)
+    -> State msg
+    -> Task Never (State msg)
+onEffects router newSubs { tags, pid } =
+    let
+        config =
+            List.head newSubs
+                |> Maybe.map (\(MySub config _) -> config)
+
+        tags =
+            List.map (\(MySub _ tagger) -> tagger) newSubs
+    in
+    case pid of
+        Nothing ->
+            case tags of
+                [] ->
+                    Task.succeed (State tags pid)
+
+                _ ->
+                    watch config (Platform.sendToSelf router) Msg
+                        |> Process.spawn
+                        |> Task.map (\pid -> State tags (Just pid))
+
+        Just pid ->
+            case newSubs of
+                [] ->
+                    Process.kill pid
+                        |> Task.map (always (State [] Nothing))
+
+                _ ->
+                    Task.succeed (State tags pid)
+
+
+{-| -}
+watch :
+    Config_pro2
+    -> (Msg -> Task Never ())
+    -> (TouchResponse -> Msg)
+    -> Task x Never
+watch =
+    Elm.Kernel.ProOperate.spawnCommunication_pro2
+
+
+{-| -}
+onSelfMsg :
+    Platform.Router msg Msg
+    -> Msg
+    -> State msg
+    -> Task Never (State msg)
+onSelfMsg router msg state =
+    let
+        send tagger =
+            Platform.sendToApp router <|
+                case tagger of
+                    Touch f ->
+                        f msg.response
+    in
+    case state.tags of
+        [] ->
+            Task.succeed state
+
+        tagger :: rest ->
+            Task.sequence (List.map send tagger :: rest)
+                |> Task.map (always state)
