@@ -77,6 +77,31 @@ function _ProOperate_setKeypadDisplay(display)
     });
 }
 
+var _ProOperate_spawnCommunication_pro2 = F2(function (config, toSuccessTask, toMsg)
+{
+    return _Scheduler_binding(function(callback)
+    {
+        function onEvent(eventCode) {
+            var msg = A2(toMsg, "usb", eventCode);
+            _Scheduler_rawSpawn(toSuccessTask(msg));
+        }
+        function onKeyDown(eventCode) {
+            var msg = A2(toMsg, "keydown", eventCode);
+            _Scheduler_rawSpawn(toSuccessTask(msg));
+        }
+        function onKeyUp(eventCode) {
+            var msg = A2(toMsg, "keyup", eventCode);
+            _Scheduler_rawSpawn(toSuccessTask(msg));
+        }
+        var param = {
+            onKeyDown : onKeyDown,
+            onKeyUp : onKeyUp,
+            onEvent : onEvent
+        };
+        ProOperate().startCommunication(param);
+        return function () { ProOperate().stopKeypadListen(); };
+    });
+});
 var _ProOperate_startKeypadListen = F2(function (toSuccessTask, toMsg)
 {
     return _Scheduler_binding(function(callback)
@@ -144,10 +169,27 @@ function _ProOperate_toMifareArray(elmConfig)
     return result;
 }
 
-var _ProOperate_startCommunication_pro2 = F2(function (elmConfig, toError)
+function _ProOperate_elmConfigToJsConfig(elmConfig)
 {
     var felicaArray = _ProOperate_toFelicaArray(elmConfig);
     var mifareArray = _ProOperate_toMifareArray(elmConfig);
+    /* Config設定 */
+    var config = {
+        successSound: elmConfig.successSound,
+        failSound: elmConfig.failSound,
+        successLamp: elmConfig.successLamp,
+        failLamp: elmConfig.failLamp,
+        waitLamp: elmConfig.waitLamp,
+        felica: felicaArray,
+        mifare: mifareArray,
+        onetime: true,
+        typeB: elmConfig.typeB,
+        onEvent: undefined
+    }
+}
+
+var _ProOperate_startCommunication_pro2 = F2(function (elmConfig, toError)
+{
     return _Scheduler_binding(function(callback)
     {
         /* 値をMaybeに */
@@ -160,18 +202,7 @@ var _ProOperate_startCommunication_pro2 = F2(function (elmConfig, toError)
             }
         }
         /* Config設定 */
-        var config = {
-            successSound: elmConfig.successSound,
-            failSound: elmConfig.failSound,
-            successLamp: elmConfig.successLamp,
-            failLamp: elmConfig.failLamp,
-            waitLamp: elmConfig.waitLamp,
-            felica: felicaArray,
-            mifare: mifareArray,
-            onetime: true,
-            typeB: elmConfig.typeB,
-            onEvent: undefined
-        }
+        var config = _ProOperate_elmConfigToJsConfig(elmConfig);
         var touchPromise = new Promise((resolve, reject) => {
             /* カード消失イベント時にTask完了 */
             config.onEvent = done;
