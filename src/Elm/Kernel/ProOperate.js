@@ -79,6 +79,7 @@ function _ProOperate_setKeypadDisplay(display)
 
 var _ProOperate_spawnCommunication_pro2 = F3(function (config, toSuccessTask, toMsg)
 {
+    console.log("config:"+JSON.stringify(config));
     return _Scheduler_binding(function(callback)
     {
         /* 値をMaybeに */
