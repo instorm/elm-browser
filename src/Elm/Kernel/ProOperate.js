@@ -81,27 +81,43 @@ var _ProOperate_spawnCommunication_pro2 = F2(function (config, toSuccessTask, to
 {
     return _Scheduler_binding(function(callback)
     {
-        function onEvent(eventCode) {
-            var msg = A2(toMsg, "usb", eventCode);
-            _Scheduler_rawSpawn(toSuccessTask(msg));
+        /* 値をMaybeに */
+        function _valueToMaybe(value) {
+            if (value === undefined) {
+                return __Maybe_Nothing;
+            }
+            else {
+                return __Maybe_Just(value);
+            }
         }
-        function onKeyDown(eventCode) {
-            var msg = A2(toMsg, "keydown", eventCode);
-            _Scheduler_rawSpawn(toSuccessTask(msg));
-        }
-        function onKeyUp(eventCode) {
-            var msg = A2(toMsg, "keyup", eventCode);
-            _Scheduler_rawSpawn(toSuccessTask(msg));
-        }
-        var param = {
-            onKeyDown : onKeyDown,
-            onKeyUp : onKeyUp,
-            onEvent : onEvent
-        };
+        var config = _ProOperate_elmConfigToJsConfig(config);
+        config.onetime = False
+        config.onEvent = onEvent;
+        var touchPromise = new Promise((resolve, reject) => {
+            function onEvent(eventCode, response) {
+                if (eventCode == 1) {
+                    resolve({
+                        category: response.category,
+                        paramResult: _valueToMaybe(response.paramResult),
+                        auth: _valueToMaybe(response.auth),
+                        idm: _valueToMaybe(response.idm),
+                        data: _valueToMaybe(response.data),
+                    });
+                }
+                else {
+                    touchPromise.then((response)=>{
+                        var msg = toMsg(response);
+                        _Scheduler_rawSpawn(toSuccessTask(msg));
+                    });
+                }
+            }
+        });
         ProOperate().startCommunication(param);
-        return function () { ProOperate().stopKeypadListen(); };
+
+        return function () { ProOperate().stopCommunication(); };
     });
 });
+
 var _ProOperate_startKeypadListen = F2(function (toSuccessTask, toMsg)
 {
     return _Scheduler_binding(function(callback)
