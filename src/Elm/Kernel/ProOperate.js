@@ -92,8 +92,6 @@ var _ProOperate_spawnCommunication_pro2 = F3(function (elmConfig, toSuccessTask,
             }
         }
         var config = _ProOperate_elmConfigToJsConfig(elmConfig);
-        config.onetime = false;
-        config.onEvent = onEvent;
         var touchPromise = new Promise((resolve, reject) => {
             function onEvent(eventCode, response) {
                 if (eventCode == 1) {
@@ -112,6 +110,8 @@ var _ProOperate_spawnCommunication_pro2 = F3(function (elmConfig, toSuccessTask,
                     });
                 }
             }
+            config.onetime = false;
+            config.onEvent = onEvent;
         });
         ProOperate().startCommunication(param);
 
