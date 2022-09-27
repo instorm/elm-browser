@@ -5,6 +5,7 @@ effect module ProOperate where { subscription = MySub } exposing
     , contentsSetVersion
     , Config_pro2, defaultConfig_pro2
     , TouchResponse, untilTouch_pro2
+    , observeTouch
     )
 
 {-| This module helps you operate the Pit Touch Pro. This is the
@@ -31,6 +32,7 @@ PitTouch is Reader for Felica.
 
 @docs Config_pro2, defaultConfig_pro2
 @docs TouchResponse, untilTouch_pro2
+@docs observeTouch
 
 -}
 
