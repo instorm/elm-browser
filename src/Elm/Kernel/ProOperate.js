@@ -77,7 +77,7 @@ function _ProOperate_setKeypadDisplay(display)
     });
 }
 
-var _ProOperate_spawnCommunication_pro2 = F2(function (config, toSuccessTask, toMsg)
+var _ProOperate_spawnCommunication_pro2 = F3(function (config, toSuccessTask, toMsg)
 {
     return _Scheduler_binding(function(callback)
     {
