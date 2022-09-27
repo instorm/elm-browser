@@ -1,4 +1,4 @@
-module ProOperate exposing
+effect module ProOperate where { subscription = MySub } exposing
     ( productType
     , terminalId
     , firmwareVersion
