@@ -113,7 +113,7 @@ var _ProOperate_spawnCommunication_pro2 = F3(function (elmConfig, toSuccessTask,
             config.onetime = false;
             config.onEvent = onEvent;
         });
-        ProOperate().startCommunication(param);
+        ProOperate().startCommunication(config);
 
         return function () { ProOperate().stopCommunication(); };
     });
