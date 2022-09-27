@@ -37,8 +37,10 @@ PitTouch is Reader for Felica.
 import Dict exposing (Dict)
 import Elm.Kernel.ProOperate
 import Maybe exposing (Maybe)
+import Platform
 import ProOperate.Card as Card exposing (Felica, Mifare)
 import ProOperate.Error as Error exposing (Error, newError)
+import Process
 import String exposing (String)
 import Task exposing (Task)
 
