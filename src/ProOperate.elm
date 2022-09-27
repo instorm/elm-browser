@@ -130,8 +130,8 @@ untilTouch_pro2 config =
 
 
 {-| -}
-observeTouch : Config_pro2 -> (TouchResponse -> msg) -> Sub msg
-observeTouch config tagger =
+observeTouch : (TouchResponse -> msg) -> Config_pro2 -> Sub msg
+observeTouch tagger config =
     subscription (MySub config (Touch tagger))
 
 
