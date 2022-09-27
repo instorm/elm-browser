@@ -185,7 +185,8 @@ function _ProOperate_elmConfigToJsConfig(elmConfig)
         onetime: true,
         typeB: elmConfig.typeB,
         onEvent: undefined
-    }
+    };
+    return config;
 }
 
 var _ProOperate_startCommunication_pro2 = F2(function (elmConfig, toError)
