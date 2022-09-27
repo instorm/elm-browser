@@ -92,27 +92,20 @@ var _ProOperate_spawnCommunication_pro2 = F3(function (elmConfig, toSuccessTask,
             }
         }
         var config = _ProOperate_elmConfigToJsConfig(elmConfig);
-        var touchPromise = new Promise((resolve, reject) => {
-            function onEvent(eventCode, response) {
-                if (eventCode == 1) {
-                    resolve({
-                        category: response.category,
-                        paramResult: _valueToMaybe(response.paramResult),
-                        auth: _valueToMaybe(response.auth),
-                        idm: _valueToMaybe(response.idm),
-                        data: _valueToMaybe(response.data),
-                    });
-                }
-                else {
-                    touchPromise.then((response)=>{
-                        var msg = toMsg(response);
-                        _Scheduler_rawSpawn(toSuccessTask(msg));
-                    });
-                }
+        function onEvent(eventCode, response) {
+            if (eventCode == 1) {
+                var msg = toMsg({
+                    category: response.category,
+                    paramResult: _valueToMaybe(response.paramResult),
+                    auth: _valueToMaybe(response.auth),
+                    idm: _valueToMaybe(response.idm),
+                    data: _valueToMaybe(response.data),
+                });
+                _Scheduler_rawSpawn(toSuccessTask(msg));
             }
-            config.onetime = false;
-            config.onEvent = onEvent;
-        });
+        }
+        config.onetime = false;
+        config.onEvent = onEvent;
         ProOperate().startCommunication(config);
 
         return function () { ProOperate().stopCommunication(); };
