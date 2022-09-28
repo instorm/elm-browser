@@ -121,17 +121,8 @@ untilTouch_pro2 config =
             Dict.fromList errors
                 |> Dict.get n
                 |> Maybe.withDefault (newError "Unknown Error" "Where?")
-
-        _ =
-            Debug.log "before:config" config
-
-        task =
-            Elm.Kernel.ProOperate.startCommunication_pro2 config toError
-
-        _ =
-            Debug.log "after:config" config
     in
-    task
+    Elm.Kernel.ProOperate.startCommunication_pro2 config toError
 
 
 
