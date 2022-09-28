@@ -230,7 +230,7 @@ watch :
 watch config =
     let
         _ =
-            Debug.log "watch" config
+            Debug.log "config:" config
     in
     Elm.Kernel.ProOperate.spawnCommunication_pro2 config
 
