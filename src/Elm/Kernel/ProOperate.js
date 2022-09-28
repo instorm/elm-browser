@@ -179,8 +179,9 @@ function _ProOperate_toMifareArray(elmConfig)
     return result;
 }
 
-function _ProOperate_elmConfigToJsConfig(elmConfig)
+function _ProOperate_elmConfigToJsConfig(elmConfig_)
 {
+    var elmConfig = JSON.parse(JSON.stringify(elmConfig));
     var felicaArray = _ProOperate_toFelicaArray(elmConfig);
     var mifareArray = _ProOperate_toMifareArray(elmConfig);
     /* Config設定 */
