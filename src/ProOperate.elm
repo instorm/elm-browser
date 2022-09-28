@@ -228,10 +228,6 @@ watch :
     -> (TouchResponse -> Msg)
     -> Task x Never
 watch config =
-    let
-        _ =
-            Debug.log "config:" config
-    in
     Elm.Kernel.ProOperate.spawnCommunication_pro2 config
 
 
