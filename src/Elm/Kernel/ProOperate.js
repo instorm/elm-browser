@@ -181,7 +181,9 @@ function _ProOperate_toMifareArray(elmConfig)
 
 function _ProOperate_elmConfigToJsConfig(elmConfig_)
 {
-    var elmConfig = JSON.parse(JSON.stringify(elmConfig));
+    console.log("toJs:before:"+JSON.stringify(elmConfig_));
+    var elmConfig = JSON.parse(JSON.stringify(elmConfig_));
+    console.log("toJs:after:"+JSON.stringify(elmConfig));
     var felicaArray = _ProOperate_toFelicaArray(elmConfig);
     var mifareArray = _ProOperate_toMifareArray(elmConfig);
     /* Config設定 */
